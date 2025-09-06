@@ -10,30 +10,35 @@ type ReplaceStr string
 
 // Boolean flag types with constants
 type NullDelimFlag bool
+
 const (
 	NullDelim   NullDelimFlag = true
 	NoNullDelim NullDelimFlag = false
 )
 
 type PrintFlag bool
+
 const (
 	Print   PrintFlag = true
 	NoPrint PrintFlag = false
 )
 
 type InteractiveFlag bool
+
 const (
 	Interactive   InteractiveFlag = true
 	NoInteractive InteractiveFlag = false
 )
 
 type NoRunEmptyFlag bool
+
 const (
-	NoRunEmpty   NoRunEmptyFlag = true
-	RunEmpty     NoRunEmptyFlag = false
+	NoRunEmpty NoRunEmptyFlag = true
+	RunEmpty   NoRunEmptyFlag = false
 )
 
 type VerboseFlag bool
+
 const (
 	Verbose   VerboseFlag = true
 	NoVerbose VerboseFlag = false

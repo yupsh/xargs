@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -268,7 +267,9 @@ func TestXargs_InputDelimiters(t *testing.T) {
 				cmd = xargs.Xargs(fmt.Sprintf("capture_%s", tt.name), opt.MaxArgs(1))
 			}
 
-			err := cmd.(interface{ Execute(context.Context, any, any, any) error }).Execute(ctx, input, &output, &stderr)
+			err := cmd.(interface {
+				Execute(context.Context, any, any, any) error
+			}).Execute(ctx, input, &output, &stderr)
 			if err != nil {
 				t.Errorf("Unexpected error: %v", err)
 			}
