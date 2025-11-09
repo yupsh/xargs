@@ -10,12 +10,12 @@ import (
 	"strings"
 	"sync"
 
-	yup "github.com/gloo-foo/framework"
+	gloo "github.com/gloo-foo/framework"
 )
 
 type command Inputs[flags]
 
-func Xargs(parameters ...any) yup.Command {
+func Xargs(parameters ...any) gloo.Command {
 	cmd := command(args[flags](parameters...))
 	if cmd.Flags.MaxArgs == 0 {
 		cmd.Flags.MaxArgs = 256
@@ -29,7 +29,7 @@ func Xargs(parameters ...any) yup.Command {
 	return cmd
 }
 
-func (p command) Executor() yup.CommandExecutor {
+func (p command) Executor() gloo.CommandExecutor {
 	return func(ctx context.Context, stdin io.Reader, stdout, stderr io.Writer) error {
 		scanner := bufio.NewScanner(stdin)
 
@@ -87,7 +87,7 @@ func (p command) Executor() yup.CommandExecutor {
 				wg.Add(1)
 				semaphore <- struct{}{}
 
-				go func(cmd yup.Command) {
+				go func(cmd gloo.Command) {
 					defer wg.Done()
 					defer func() { <-semaphore }()
 
@@ -134,18 +134,18 @@ func (p command) Executor() yup.CommandExecutor {
 
 type Inputs[O any] struct {
 	Flags    O
-	commands []yup.Command
+	commands []gloo.Command
 	args     []string
 }
 
 func args[O any](parameters ...any) (result Inputs[O]) {
-	var options []yup.Switch[O]
+	var options []gloo.Switch[O]
 
 	for _, arg := range parameters {
 		switch v := arg.(type) {
-		case yup.Switch[O]:
+		case gloo.Switch[O]:
 			options = append(options, v)
-		case yup.Command:
+		case gloo.Command:
 			result.commands = append(result.commands, v)
 		case string:
 			result.args = append(result.args, v)
@@ -158,7 +158,7 @@ func args[O any](parameters ...any) (result Inputs[O]) {
 	return result
 }
 
-func configure[T any](opts ...yup.Switch[T]) T {
+func configure[T any](opts ...gloo.Switch[T]) T {
 	def := new(T)
 	for _, opt := range opts {
 		if opt == nil {
